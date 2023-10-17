@@ -15,6 +15,20 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class Sample3AuthConfiguration {
+
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.formLogin(login -> login.permitAll()).logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/"))
+        .authorizeHttpRequests(
+            authz -> authz
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/sample4/**"))
+                .authenticated()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
+                .permitAll());
+
+    return http.build();
+  }
+
   @Bean
   public InMemoryUserDetailsManager userDetailsService() {
     UserDetails user1 = User.withUsername("mato")
