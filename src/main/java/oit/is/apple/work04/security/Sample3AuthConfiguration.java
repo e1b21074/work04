@@ -24,7 +24,12 @@ public class Sample3AuthConfiguration {
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/sample4/**"))
                 .authenticated()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
-                .permitAll());
+                .permitAll())
+        .csrf(csrf -> csrf
+            .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/*")))
+        .headers(headers -> headers
+            .frameOptions(frameOptions -> frameOptions
+                .sameOrigin()));
 
     return http.build();
   }
